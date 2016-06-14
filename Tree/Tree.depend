@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1465885557 source:c:\users\david\documents\codeblocks_projects\tree\main.cpp
+	<iostream>
+	"Tree.h"
+
+1465885719 c:\users\david\documents\codeblocks_projects\tree\include\tree.h
+	<iostream>
+	<cstdlib>
+	<string>
+
+1465716971 source:c:\users\david\documents\codeblocks_projects\tree\src\tree.cpp
+	"Tree.h"
+

@@ -11,3 +11,12 @@
 1465716971 source:c:\users\david\documents\codeblocks_projects\tree\src\tree.cpp
 	"Tree.h"
 
+1465889542 source:c:\users\david\documents\codeblocks_projects\datastructures\tree\main.cpp
+	<iostream>
+	"Tree.h"
+
+1465889703 c:\users\david\documents\codeblocks_projects\datastructures\tree\include\tree.h
+	<iostream>
+	<cstdlib>
+	<string>
+

@@ -5,11 +5,13 @@ using namespace std;
 
 int main()
 {
-    Tree<string> myTree;
-    myTree.insertValue("aaaar");
-    myTree.insertValue("aaaaq");
-    myTree.insertValue("aaaap");
+    Tree<int> myTree;
+    myTree.insertValue(7);
+    myTree.insertValue(1);
+    myTree.insertValue(9);
 
+    myTree.printIncreasingOrder();
+    myTree.printDecreasingOrder();
 
     cout << "\nBack in main!" << endl;
     return 0;

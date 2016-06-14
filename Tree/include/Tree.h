@@ -24,16 +24,17 @@ class Tree
         void insertValue(T s);
         void addLeaf(T key, Node<T>* ptr);
 
-        void printIncOrder();
-        void PrintDecOrder();
+        void printIncreasingOrder();
+        void printDecreasingOrder();
 
         Node<T>* createLeaf(T s);
-        T getValue(T s);
 
     protected:
 
     private:
         Node<T>* root;
+        void printIncOrder(Node<T>* ptr);
+        void printDecOrder(Node<T>* ptr);
 
 
 };
@@ -95,9 +96,59 @@ Node<T>* Tree<T>::createLeaf(T key)
 }
 
 template <class T>
-T Tree<T>::getValue(T n)
+void Tree<T>::printIncreasingOrder()
 {
+    printIncOrder(root);
+    cout<<endl;
+}
 
+template <class T>
+void Tree<T>::printIncOrder(Node<T>* ptr)
+{
+    if(root != NULL)
+    {
+        if(ptr->left != NULL)
+        {
+            printIncOrder(ptr->left);
+        }
+        cout << ptr->key << " ";
+        if(ptr->right != NULL)
+        {
+            printIncOrder(ptr->right);
+        }
+    }
+    else
+    {
+        cout<<"The tree is empty\n";
+    }
+}
+
+template <class T>
+void Tree<T>::printDecreasingOrder()
+{
+    printDecOrder(root);
+    cout<<endl;
+}
+
+template <class T>
+void Tree<T>::printDecOrder(Node<T>* ptr)
+{
+    if(root != NULL)
+    {
+        if(ptr->right != NULL)
+        {
+            printDecOrder(ptr->right);
+        }
+        cout << ptr->key << " ";
+        if(ptr->left != NULL)
+        {
+            printDecOrder(ptr->left);
+        }
+    }
+    else
+    {
+        cout<<"The tree is empty\n";
+    }
 }
 
 template <class T>

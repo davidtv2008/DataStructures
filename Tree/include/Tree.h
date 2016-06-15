@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <string>
 
 using namespace std;
 
@@ -22,27 +21,33 @@ class Tree
         Tree();
         ~Tree();
         void insertValue(T s);
-        void addLeaf(T key, Node<T>* ptr);
-
+        void deleteValue(T s);
         void printIncreasingOrder();
         void printDecreasingOrder();
 
-        Node<T>* createLeaf(T s);
+        int getSize();
 
     protected:
 
     private:
         Node<T>* root;
+        Node<T>* previousNode;
+
+        void addLeaf(T key, Node<T>* ptr);
+        void deleteLeaf(T key, Node<T>* ptr);
+
+        Node<T>* createLeaf(T s);
+        int treeSize;
+
         void printIncOrder(Node<T>* ptr);
         void printDecOrder(Node<T>* ptr);
-
-
 };
 
 template <class T>
 Tree<T>::Tree()
 {
     root = NULL;
+    treeSize = 0;
 }
 
 template <class T>
@@ -50,33 +55,73 @@ void Tree<T>::insertValue(T s)
 {
     addLeaf(s,root);
 }
+
+template <class T>
+void Tree<T>::deleteValue(T s)
+{
+    deleteLeaf(s,root);
+}
+
+template<class T>
+void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
+{
+    if(root != NULL)
+    {
+        if(key == ptr->key)
+        {
+
+        }
+        else if(key != ptr->key)
+        {
+            if(key < ptr->key)
+            {
+
+            }
+        }
+    }
+    else
+    {
+        cout<<"The tree is empty"<<endl;
+    }
+}
+
 template <class T>
 void Tree<T>::addLeaf(T key,Node<T>* ptr)
 {
     if(root == NULL)
     {
+        cout<<"root: "<<key<<endl;
         root = createLeaf(key);
+        treeSize++;
     }
-    else if(key < root->key)
+    else if(key < ptr->key)
     {
-         if(ptr->left != NULL)
+        if(ptr->left != NULL)
         {
-           addLeaf(key,ptr->left);
+           if(key != ptr->left->key)
+            {
+                addLeaf(key,ptr->left);
+            }
         }
         else
         {
             ptr->left = createLeaf(key);
+            treeSize++;
         }
     }
-    else if(key > root->key)
+    else if(key > ptr->key)
     {
          if(ptr->right != NULL)
         {
-            addLeaf(key,ptr->right);
+            if(key != ptr->key)
+            {
+                addLeaf(key,ptr->right);
+            }
         }
         else
         {
             ptr->right = createLeaf(key);
+            treeSize++;
         }
     }
     else
@@ -111,7 +156,7 @@ void Tree<T>::printIncOrder(Node<T>* ptr)
         {
             printIncOrder(ptr->left);
         }
-        cout << ptr->key << " ";
+        cout<<ptr->key<<" ";
         if(ptr->right != NULL)
         {
             printIncOrder(ptr->right);
@@ -149,6 +194,12 @@ void Tree<T>::printDecOrder(Node<T>* ptr)
     {
         cout<<"The tree is empty\n";
     }
+}
+
+template<class T>
+int Tree<T>::getSize()
+{
+   return treeSize;
 }
 
 template <class T>

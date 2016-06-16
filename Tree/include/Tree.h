@@ -9,6 +9,7 @@ using namespace std;
 template<class T>
 struct Node
 {
+    //tree structure with 1 key, and 2 pointers
     T key;
     Node<T>* left;
     Node<T>* right;
@@ -25,20 +26,24 @@ class Tree
         void printIncreasingOrder();
         void printDecreasingOrder();
 
+        //return number of elements in the tree
         int getSize();
 
     protected:
 
     private:
+        //declare our root pointer
         Node<T>* root;
-        Node<T>* previousNode;
 
+        //add and delete nodes
         void addLeaf(T key, Node<T>* ptr);
         void deleteLeaf(T key, Node<T>* ptr);
 
+        //to create a new node
         Node<T>* createLeaf(T s);
-        int treeSize;
+        int treeSize; // hold the size of the tree, will ++ on added values, or -- on removed
 
+        //to output order from smallest to greatest, and vice versa
         void printIncOrder(Node<T>* ptr);
         void printDecOrder(Node<T>* ptr);
 };
@@ -46,6 +51,7 @@ class Tree
 template <class T>
 Tree<T>::Tree()
 {
+    //tree is always empty(NULL) with 0 elements upon creation
     root = NULL;
     treeSize = 0;
 }
@@ -53,33 +59,26 @@ Tree<T>::Tree()
 template <class T>
 void Tree<T>::insertValue(T s)
 {
+    //pass parameter s so that the value gets added to the tree
     addLeaf(s,root);
 }
 
 template <class T>
 void Tree<T>::deleteValue(T s)
 {
+    //pass parameter s so that the value is searched for and removed
     deleteLeaf(s,root);
 }
 
 template<class T>
 void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
 {
+    // check if the root contains a value
     if(root != NULL)
     {
-        if(key == ptr->key)
-        {
 
-        }
-        else if(key != ptr->key)
-        {
-            if(key < ptr->key)
-            {
-
-            }
-        }
     }
-    else
+    else //execute if tree is empty
     {
         cout<<"The tree is empty"<<endl;
     }

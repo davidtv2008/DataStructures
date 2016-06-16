@@ -12,16 +12,29 @@ int main()
 
     Tree<int> myTree;
 
+    myTree.insertValue(50);
+    myTree.insertValue(30);
+    myTree.insertValue(70);
     myTree.insertValue(10);
-    myTree.insertValue(9);
-    myTree.insertValue(3);
+    myTree.insertValue(40);
+    myTree.insertValue(60);
+    myTree.insertValue(80);
+    myTree.insertValue(5);
+    myTree.insertValue(15);
+    myTree.insertValue(35);
+    myTree.insertValue(45);
+    myTree.insertValue(55);
+    myTree.insertValue(65);
+    myTree.insertValue(75);
+    myTree.insertValue(85);
 
     myTree.printIncreasingOrder();
-    //myTree.printDecreasingOrder();
+    cout<<"Tree size: "<<myTree.getSize()<<endl<<endl;
 
-    cout<<"The tree contains: "<<myTree.getSize()<<" unique items"<<endl;
-
-    myTree.deleteValue(3);
+    myTree.deleteValue(30);
+    //cout<<"Tree size: "<<myTree.getSize()<<endl;
+    //myTree.printIncreasingOrder();
+    cout<<endl;
 
     cout << "\nBack in main!" << endl;
     return 0;

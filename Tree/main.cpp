@@ -12,30 +12,27 @@ int main()
 
     Tree<int> myTree;
 
-    myTree.insertValue(50);
-    myTree.insertValue(30);
-    myTree.insertValue(70);
-    myTree.insertValue(10);
-    myTree.insertValue(40);
-    myTree.insertValue(60);
-    myTree.insertValue(80);
-    myTree.insertValue(5);
-    myTree.insertValue(15);
-    myTree.insertValue(35);
-    myTree.insertValue(45);
-    myTree.insertValue(55);
-    myTree.insertValue(65);
-    myTree.insertValue(75);
-    myTree.insertValue(85);
+    //create our root key
+    myTree.insertValue(100);
+    for(int i = 0; i < 20; i++)
+    {
+        myTree.insertValue(rand()%100);
+    }
 
     myTree.printIncreasingOrder();
     cout<<"Tree size: "<<myTree.getSize()<<endl<<endl;
 
-    myTree.deleteValue(30);
-    //cout<<"Tree size: "<<myTree.getSize()<<endl;
-    //myTree.printIncreasingOrder();
-    cout<<endl;
+    int input;
+    while(input != 0)
+    {
+        cout<<"Please enter key to delete: ";
+        cin>>input;
+        myTree.deleteValue(input);
 
-    cout << "\nBack in main!" << endl;
+        myTree.printIncreasingOrder();
+        cout<<"Tree size: "<<myTree.getSize()<<endl<<endl;
+
+    }
+
     return 0;
 }

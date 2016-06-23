@@ -23,6 +23,7 @@ class Tree
         ~Tree();
         void insertValue(T s);
         void deleteValue(T s);
+        void findValue(T s);
         void printIncreasingOrder();
         void printDecreasingOrder();
 
@@ -36,11 +37,12 @@ class Tree
         Node<T>* root;
         Node<T>* lptr;
         Node<T>* pptr;
-        Node<T>* tptr;
+        Node<T>* lpptr;
 
         //add and delete nodes
         void addLeaf(T key, Node<T>* ptr);
         void deleteLeaf(T key, Node<T>* ptr);
+        void findValuePrivate(T s, Node<T>* ptr);
         void findLastPtr(Node<T>* ptr,char side);
 
         //to create a new node
@@ -63,7 +65,7 @@ Tree<T>::Tree()
 template <class T>
 void Tree<T>::insertValue(T s)
 {
-    cout<<s<<" ";
+    //cout<<s<<" "<<endl;
     //pass parameter s so that the value gets added to the tree
     addLeaf(s,root);
 }
@@ -84,12 +86,14 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
     {
         if(ptr != NULL)
         {
+            //this is for case where root has no children
             if(root->key == key && root->left == NULL && root->right == NULL)
             {
                 treeSize--;
                 delete root;
                 root = NULL;
             }
+            //this if for case where root has left child only
             else if(root->key == key && root->right == NULL && root->left != NULL)
             {
                 if(root->left->left == NULL && root->left->right == NULL)
@@ -98,12 +102,14 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     root->key = root->left->key;
                     delete root->left;
                     root->left = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else if(root->left->left != NULL && root->left->right == NULL)
                 {
                     treeSize--;
                     root->key = root->left->key;
                     root->left = root->left->left;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else
                 {
@@ -113,8 +119,10 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     pptr->right = lptr->left;
                     delete lptr;
                     lptr = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
             }
+            //this is for case where root has right child only
             else if((root->key == key) && (root->left == NULL) && (root->right != NULL))
             {
                 if(root->right->right == NULL && root->right->left == NULL)
@@ -123,12 +131,14 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     root->key = root->right->key;
                     delete root->right;
                     root->right = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else if(root->right->right != NULL && root->right->left == NULL)
                 {
                     treeSize--;
                     root->key = root->right->key;
                     root->right = root->right->right;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else
                 {
@@ -138,9 +148,10 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     pptr->left = lptr->right;
                     delete lptr;
                     lptr = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
             }
-            //if root key and root has 2 children
+            //this is for case where root has 2 children
             else if(root->key == key && root->left != NULL && root->right != NULL)
             {
                 if(root->right->right == NULL && root->right->left == NULL)
@@ -149,12 +160,14 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     root->key = root->right->key;
                     delete root->right;
                     root->right = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else if(root->right->right != NULL && root->right->left == NULL)
                 {
                     treeSize--;
                     root->key = root->right->key;
                     root->right = root->right->right;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
                 else
                 {
@@ -164,28 +177,25 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     pptr->left = lptr->right;
                     delete lptr;
                     lptr = NULL;
+                    cout<<"New Root: "<<root->key<<endl;
                 }
             }
-            //if value to delete is less than current pointer value, "GO LEFT"
+            //this is for recursion to find the node that contains the value that is to be deleted
             else if(key < ptr->key)
             {
                 pptr = ptr; // hold the previous pointer
                 deleteLeaf(key, ptr->left); //recursion to examine each node
             }
-            //else if value to delete is greater than current pointer value, "GO RIGHT"
+            //this is for recursion to find the node that contains the value that is to be deleted
             else if( key > ptr->key)
             {
                 pptr = ptr; // hold the previous pointer
                 deleteLeaf(key, ptr->right); //recursion to examine each node
             }
-            //case number 1, parent has no children.
+            //case where value to delete is NOT in the root node and Node has no children
             else if(key == ptr->key && ptr->left == NULL && ptr->right == NULL)
             {
-                cout<<pptr->right<<"|"<<pptr->left<<endl;
                 treeSize--;
-                cout<<"Previous Pointer: "<<pptr->key<<endl;
-                cout<<"Deleting key: "<<ptr->key<<endl;
-
                 if(key > root->key && pptr->right == ptr)
                 {
                     pptr->right = NULL;
@@ -204,33 +214,66 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                     pptr->left = NULL;
                 }
             }
-            //case 2, 1 child and 1 null pointer on left
+            //case where value to delete is NOT in the root node and Node has 1 child and 1 null pointer on left
             else if(key==ptr->key && ptr->left == NULL && ptr->right != NULL)
             {
-                cout<<"examine left null and match on right"<<endl;
                 treeSize--;
-                cout<<"Previous Pointer: "<<pptr->key<<endl;
-                cout<<"Deleting key: "<<ptr->key<<endl;
-
-                delete ptr->left;//ok
-                ptr->left = NULL;//ok
-                pptr->left = ptr->right;
+                if(key < root->key)
+                {
+                    if(pptr->right == ptr)
+                    {
+                        pptr->right = ptr->right;
+                    }
+                    else if(pptr->left == ptr)
+                    {
+                        pptr->left = ptr->right;
+                    }
+                }
+                else if(key > root->key)
+                {
+                    if(pptr->left == ptr)
+                    {
+                        pptr->left = ptr->right;
+                    }
+                    else if(pptr->right == ptr)
+                    {
+                        pptr->right = ptr->right;
+                    }
+                }
                 delete ptr;
                 ptr = NULL;
-            }//case 2, 1 child and 1 null pointer on right
+
+            }
+            //case where value to delete is NOT in the root node and Node has 1 child and 1 null pointer on right
             else if(key==ptr->key && ptr->right == NULL && ptr->left != NULL)
             {
-                cout<<"examine right null and match on left"<<endl;
                 treeSize--;
-                cout<<"Previous Pointer: "<<pptr->key<<endl;
-                cout<<"Deleting key: "<<ptr->key<<endl;
-
-                delete ptr->right;//ok
-                ptr->right = NULL;//ok
-                pptr->right = ptr->left;
+                if(key < root->key)
+                {
+                    if(pptr->right == ptr)
+                    {
+                        pptr->right = ptr->left;
+                    }
+                    else if(pptr->left == ptr)
+                    {
+                        pptr->left = ptr->left;
+                    }
+                }
+                else if(key > root->key)
+                {
+                    if(pptr->left == ptr)
+                    {
+                        pptr->left = ptr->left;
+                    }
+                    else if(pptr->right == ptr)
+                    {
+                        pptr->right = ptr->left;
+                    }
+                }
                 delete ptr;
                 ptr = NULL;
             }
+            //case where value to delete is not in ROOT node, and Node has 2 children
             else if(ptr->key == key && ptr->left != NULL && ptr->right != NULL)
             {
                 treeSize--;
@@ -238,34 +281,74 @@ void Tree<T>::deleteLeaf(T key,Node<T>* ptr)
                 {
                     findLastPtr(ptr->left,'L');
                     ptr->key = lptr->key;
-                    pptr->right = lptr->left;
-                    delete lptr;
-                    lptr = NULL;
+                    if(ptr->left->right != NULL)
+                    {
+                        ptr->left->right = lptr->left;
+                    }
+                    else
+                    {
+                        ptr->left = NULL;
+                    }
                 }
                 else if(key > root->key)
                 {
                     findLastPtr(ptr->right,'R');
                     ptr->key = lptr->key;
-                    pptr->left = lptr->right;
+                    ptr->right->left = lptr->right;
                     delete lptr;
                     lptr = NULL;
                 }
             }
         }
+        //if after traversing the entire tree the value is not found, let user know value does not exist in tree
         else
         {
             cout<<"Value is not in tree"<<endl;
         }
     }
-    else //execute if tree is empty
+    //when tree is empty, no nodes, just a null root
+    else
     {
         cout<<"The tree is empty"<<endl;
     }
 }
 
 template<class T>
+void Tree<T>::findValue(T s)
+{
+   findValuePrivate(s,root);
+}
+
+template<class T>
+void Tree<T>::findValuePrivate(T s, Node<T>* ptr)
+{
+    if(ptr != NULL)
+    {
+        if(s < ptr->key)
+        {
+            findValuePrivate(s,ptr->left);
+        }
+        else if(s > ptr->key)
+        {
+            findValuePrivate(s,ptr->right);
+        }
+        else if( s == ptr->key)
+        {
+            cout<<"FOUND!"<<endl;
+        }
+    }
+    else
+    {
+        cout<<"NOT FOUND!"<<endl;
+    }
+
+}
+
+
+template<class T>
 void Tree<T>::findLastPtr(Node<T>* ptr,char side)
 {
+    //recursion until last node is found, either on left root branches or right root branches
     if(side == 'L')
     {
         if(ptr->right != NULL)
@@ -295,11 +378,13 @@ void Tree<T>::findLastPtr(Node<T>* ptr,char side)
 template <class T>
 void Tree<T>::addLeaf(T key,Node<T>* ptr)
 {
+    //when root contains nothing, create a new node and insert value
     if(root == NULL)
     {
         root = createLeaf(key);
         treeSize++;
     }
+    //when root already exists and the new value is less that root value, then add a new node on roots left branch
     else if(key < ptr->key)
     {
         if(ptr->left != NULL)
@@ -315,6 +400,7 @@ void Tree<T>::addLeaf(T key,Node<T>* ptr)
             treeSize++;
         }
     }
+    //when root already exists and the new value is greater that root value, then add a new node on roots right branch
     else if(key > ptr->key)
     {
          if(ptr->right != NULL)
@@ -332,13 +418,16 @@ void Tree<T>::addLeaf(T key,Node<T>* ptr)
     }
     else
     {
-        cout<<"value exists already"<<endl;
+        //when the value that is being added is already existing in tree.
+        //so cannot add it again to maintain uniqueness.
     }
 }
 
 template<class T>
 Node<T>* Tree<T>::createLeaf(T key)
 {
+    //each time a new value is added that is not yet in the tree, we create a new node
+    //that has left and right null children.
     Node<T>* n = new Node<T>;
     n->key = key;
     n->left = NULL;
@@ -349,6 +438,7 @@ Node<T>* Tree<T>::createLeaf(T key)
 template <class T>
 void Tree<T>::printIncreasingOrder()
 {
+    //access private print function
     printIncOrder(root);
     cout<<endl;
 }
@@ -405,7 +495,8 @@ void Tree<T>::printDecOrder(Node<T>* ptr)
 template<class T>
 int Tree<T>::getSize()
 {
-   return treeSize;
+    //for accessing the current tree size
+    return treeSize;
 }
 
 template <class T>
